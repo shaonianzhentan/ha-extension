@@ -45,9 +45,11 @@ class Hass {
     }
 
     add(url) {
-        this.list.push(url)
-        this.save()
-        this.setLink(this.list.length - 1)
+        if (!this.list.includes(url)) {
+            this.list.push(url)
+            this.save()
+            this.setLink(this.list.length - 1)
+        }
     }
 
     remove(i) {
@@ -103,6 +105,7 @@ customElements.define('link-list', class extends HTMLElement {
             span.textContent = link
             span.onclick = () => {
                 hass.setLink(index)
+                hass.toggleSetting()
             }
             li.appendChild(span)
             ul.appendChild(li)
