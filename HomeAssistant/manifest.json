@@ -1,0 +1,36 @@
+{
+    "name": "HomeAssistant",
+    "version": "0.0.0.1",
+    "manifest_version": 3,
+    "description": "用来控制HomeAssistant的设备",
+    "author": "shaonianzhentan",
+    "homepage_url": "https://github.com/shaonianzhentan/ha-extension",
+    "icons": {
+        "16": "icons/16.png",
+        "32": "icons/32.png",
+        "48": "icons/48.png",
+        "128": "icons/128.png"
+    },
+    "action": {
+        "default_icon": "icons/48.png",
+        "default_title": "家庭助理",
+        "default_popup": "popup/popup.html"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Alt+H"
+            },
+            "description": "HomeAssistant"
+        }
+    },
+    "permissions": [
+        "contextMenus",
+        "storage",
+        "scripting",
+        "activeTab"
+    ]
+}
