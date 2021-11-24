@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="HomeAssistant/icons/homeassistant.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HomeAssistant</title>
+    <script type="module" src="/src/home-assistant.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        window.getHomeAssistantUrl = () => {
+            return new Promise((resolve) => {
+                chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                    chrome.scripting.executeScript({
+                        target: { tabId: tabs[0].id },
+                        func: () => {
+                            const ha = document.body.querySelector('home-assistant')
+                            if (ha) {
+                                return location.href
+                            } else {
+                                alert("当前不是HomeAssistant页面");
+                            }
+                        }
+                    }).then((res) => {
+                        const { result } = res[0]
+                        if (result) {
+                            resolve(result)
+                        }
+                    });
+                });
+            })
+        }
+    </script>
+    <home-assistant
+        logo="https://cdn.jsdelivr.net/gh/shaonianzhentan/ha-extension@main/HomeAssistant/icons/homeassistant.svg">
+    </home-assistant>
+</body>
+
+</html>

@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <title>HomeAssistant</title>
+    <link rel="stylesheet" href="ha/style.css" />
+    <script type="module" src="ha/home-assistant.es.js"></script>
     <style>
         html,
         body {
@@ -11,86 +13,16 @@
             padding: 0;
             overflow: hidden;
         }
-
         body {
             width: 400px;
             height: 550px;
         }
-
-        header {
-            user-select: none;
-        }
-
-        .hide {
-            display: none !important;
-        }
-
-        .link-home {
-            padding: 30px;
-            padding-top: 100px;
-            text-align: center;
-        }
-
-        .link-home input {
-            display: block;
-            border: none;
-            border-bottom: 1px solid #eee;
-            width: 300px;
-            padding: 10px;
-            margin: 10px;
-        }
-
-        .link-home button {
-            border: none;
-            color: #03a9f4;
-            padding: 8px 32px;
-            text-align: center;
-            font-size: 16px;
-            border-radius: 0;
-            margin-top: 50px;
-            cursor: pointer;
-            transition: .5s;
-        }
-
-        .link-home button:hover {
-            background-color: #03a9f4;
-            color: white;
-        }
-
-        #panel {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-            height: 30px;
-            width: 100%;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            color: #03a9f4;
-            cursor: pointer;
-        }
     </style>
+
 </head>
 
 <body>
-    <!-- 保存信息 -->
-    <div class="link-home">
-        <img src="../icons/homeassistant.svg" />
-        <h1>连接到您的HomeAssistant</h1>
-        <button id="btnAuth">添加当前页面</button>
-    </div>
-    <!-- 对话面板 -->
-    <div id="panel" class="hide">
-        <header>
-            <img src="../icons/homeassistant.svg" style="height:20px; margin:5px;" /> HomeAssistant
-        </header>
-        <iframe id="iframe" style="width:100%; height:100%; border:none;" class="hide"></iframe>
-        <link-list id="link-list" class="hide"></link-list>
-    </div>
-    <script src="popup.js"></script>
+    <home-assistant logo="../icons/homeassistant.svg"></home-assistant>
 </body>
 
 </html>

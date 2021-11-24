@@ -1,0 +1,20 @@
+{
+  "name": "home-assistant",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@material/mwc-button": "^0.25.3",
+    "@material/mwc-fab": "^0.25.3",
+    "@material/mwc-icon": "^0.25.3",
+    "@material/mwc-icon-button": "^0.25.3",
+    "@material/mwc-menu": "^0.25.3",
+    "lit": "^2.0.2",
+    "material-icons": "^1.10.2"
+  },
+  "devDependencies": {
+    "vite": "^2.6.13"
+  }
+}

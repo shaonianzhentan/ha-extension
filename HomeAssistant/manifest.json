@@ -1,8 +1,8 @@
 {
     "name": "HomeAssistant",
-    "version": "0.0.0.1",
+    "version": "0.0.0.2",
     "manifest_version": 3,
-    "description": "随时随地控制HomeAssistant的设备",
+    "description": "随时随地控制我的智能设备",
     "author": "shaonianzhentan",
     "homepage_url": "https://github.com/shaonianzhentan/ha-extension",
     "icons": {
