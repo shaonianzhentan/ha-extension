@@ -17,31 +17,7 @@
     </style>
 </head>
 
-<body>
-    <script>
-        window.getHomeAssistantUrl = () => {
-            return new Promise((resolve) => {
-                chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                    chrome.scripting.executeScript({
-                        target: { tabId: tabs[0].id },
-                        func: () => {
-                            const ha = document.body.querySelector('home-assistant')
-                            if (ha) {
-                                return location.href
-                            } else {
-                                alert("当前不是HomeAssistant页面");
-                            }
-                        }
-                    }).then((res) => {
-                        const { result } = res[0]
-                        if (result) {
-                            resolve(result)
-                        }
-                    });
-                });
-            })
-        }
-    </script>
+<body>    
     <home-assistant
         logo="https://cdn.jsdelivr.net/gh/shaonianzhentan/ha-extension@main/HomeAssistant/icons/homeassistant.svg">
     </home-assistant>
