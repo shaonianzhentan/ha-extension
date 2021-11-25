@@ -1,0 +1,35 @@
+name: 发布版本
+on: push
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        uses: actions/setup-node@v2
+
+      - name: Install zip
+        uses: montudor/action-zip@v1
+
+      - name: Dependencies
+        run: npm ci
+
+      - name: Build for Edge
+        run: npm run build
+
+      - name: Zip for Edge
+        if: startsWith(github.ref, 'refs/tags/')
+        run: zip -q -r ../home-assistant-edge.zip *
+        working-directory: HomeAssistant
+
+      - name: Upload assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: home-assistant-*
+          tag: ${{ github.ref }}
+          file_glob: true

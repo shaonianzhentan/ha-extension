@@ -21,6 +21,7 @@
 ## 灵感来源
 
 - [https://github.com/warwickofthegh/Browser-Extension-Home-Assistant-Quick-Restart](https://github.com/warwickofthegh/Browser-Extension-Home-Assistant-Quick-Restart)
+- [https://github.com/bokub/home-assistant-extension](https://github.com/bokub/home-assistant-extension)
 
 ## 如果这个项目对你有帮助，请我喝杯<del style="font-size: 14px;">咖啡</del>奶茶吧😘
 |  |支付宝|微信|
