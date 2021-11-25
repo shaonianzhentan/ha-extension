@@ -70,7 +70,7 @@ export class HomeAssistant extends LitElement {
         <li divider role="separator"></li>
         ${this.list.map(
                 (ele) => html`<mwc-list-item hasMeta>
-          <span @click="${this._selectClick.bind(this, ele)}">${ele}</span>
+          <span title="${ele}" @click="${this._selectClick.bind(this, ele)}">${ele}</span>
           <mwc-icon slot="meta" @click="${this._removeClick.bind(
                     this,
                     ele
