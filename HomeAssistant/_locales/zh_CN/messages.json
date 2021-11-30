@@ -22,5 +22,9 @@
     "cancel": {
         "message": "取消",
         "description": "文本"
+    },
+    "delete": {
+        "message": "删除",
+        "description": "文本"
     }
 }

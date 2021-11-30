@@ -39,7 +39,8 @@ export class HomeAssistant extends LitElement {
             link_ha: chrome.i18n.getMessage("link_ha"),
             error_tips: chrome.i18n.getMessage("error_tips"),
             add: chrome.i18n.getMessage("add"),
-            cancel: chrome.i18n.getMessage("cancel")
+            cancel: chrome.i18n.getMessage("cancel"),
+            delete: chrome.i18n.getMessage("delete")
         }
 
         try {
@@ -82,7 +83,7 @@ export class HomeAssistant extends LitElement {
         ${this.list.map((ele, index) => html`<mwc-list-item twoline hasMeta>
           <span title="${ele.title}" @click="${this._selectClick.bind(this, ele, index)}">${ele.title}</span>
           <span title="${ele.url}" @click="${this._selectClick.bind(this, ele, index)}" slot="secondary">${ele.url}</span>
-          <mwc-icon slot="meta" title="delete" @click="${this._removeClick.bind(this, index)}">remove</mwc-icon>
+          <mwc-icon slot="meta" title="${this.i18n.delete}" @click="${this._removeClick.bind(this, index)}">remove</mwc-icon>
         </mwc-list-item>`
             )}
             <li divider role="separator"></li>
@@ -141,16 +142,22 @@ export class HomeAssistant extends LitElement {
                         this._save()
                     }
                 } else {
-                    const snackbar = document.createElement('mwc-snackbar')
-                    snackbar.labelText = this.i18n.error_tips
-                    document.body.appendChild(snackbar)
-                    snackbar.show();
-                    setTimeout(() => {
-                        snackbar.remove()
-                    }, 3000)
+                    this._showTips(this.i18n.error_tips)
                 }
+            }).catch(() => {
+                this._showTips(this.i18n.error_tips)
             });
         });
+    }
+
+    _showTips(text) {
+        const snackbar = document.createElement('mwc-snackbar')
+        snackbar.labelText = text
+        document.body.appendChild(snackbar)
+        snackbar.show();
+        setTimeout(() => {
+            snackbar.remove()
+        }, 3000)
     }
 
     _selectClick(data, index) {

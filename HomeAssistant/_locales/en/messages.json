@@ -22,5 +22,9 @@
     "cancel": {
         "message": "cancel",
         "description": "text"
+    },
+    "delete": {
+        "message": "delete",
+        "description": "text"
     }
 }
