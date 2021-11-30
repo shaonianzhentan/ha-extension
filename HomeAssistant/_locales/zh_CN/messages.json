@@ -1,0 +1,26 @@
+{
+    "title": {
+        "message": "家庭助理",
+        "description": "扩展名称"
+    },
+    "description": {
+        "message": "随时随地控制我的智能设备",
+        "description": "扩展描述"
+    },
+    "link_ha": {
+        "message": "连接到您的HomeAssistant",
+        "description": "文本"
+    },
+    "error_tips": {
+        "message": "当前不是HomeAssistant页面",
+        "description": "文本"
+    },
+    "add": {
+        "message": "添加",
+        "description": "文本"
+    },
+    "cancel": {
+        "message": "取消",
+        "description": "文本"
+    }
+}

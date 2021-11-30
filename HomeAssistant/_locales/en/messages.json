@@ -1,0 +1,26 @@
+{
+    "title": {
+        "message": "HomeAssistant",
+        "description": "extension name"
+    },
+    "description": {
+        "message": "Control my smart device anytime, anywhere",
+        "description": "extension description"
+    },
+    "link_ha": {
+        "message": "Connect to your homeassistant",
+        "description": "text"
+    },
+    "error_tips": {
+        "message": "not homeassistant page",
+        "description": "text"
+    },
+    "add": {
+        "message": "add",
+        "description": "text"
+    },
+    "cancel": {
+        "message": "cancel",
+        "description": "text"
+    }
+}

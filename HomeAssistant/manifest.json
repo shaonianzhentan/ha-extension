@@ -1,8 +1,9 @@
 {
     "name": "HomeAssistant",
-    "version": "0.0.0.2",
+    "version": "0.0.0.3",
+    "default_locale": "zh_CN",
     "manifest_version": 3,
-    "description": "随时随地控制我的智能设备",
+    "description": "__MSG_description__",
     "author": "shaonianzhentan",
     "homepage_url": "https://github.com/shaonianzhentan/ha-extension",
     "icons": {
@@ -13,7 +14,7 @@
     },
     "action": {
         "default_icon": "icons/48.png",
-        "default_title": "家庭助理",
+        "default_title": "__MSG_title__",
         "default_popup": "popup/popup.html"
     },
     "commands": {
