@@ -1,5 +1,8 @@
 name: 发布版本
-on: push
+
+on:
+  release:
+    types: [published]
 
 jobs:
   publish:
