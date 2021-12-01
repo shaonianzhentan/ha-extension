@@ -10,8 +10,9 @@
 1. 打开你的`HomeAssistant页面`，登录并保存状态
 2. 点击扩展图标（也可使用`Alt+H`快捷键）显示小窗口
 3. 初次使用点击添加，会自动将当前`HomeAssistant页面`显示到扩展之中
-4. 之后再任何页面，都可以打开扩展显示`HomeAssistant页面`
+4. 之后在任何页面，都可以打开扩展显示`HomeAssistant页面`
 5. 点击扩展界面右下解绿色菜单按钮，可对添加的`HomeAssistant页面`进行操作选择
+6. 在菜单面板中点击蓝色标题在当前小窗口打开，橙色链接则打开新页面
 
 ## 截图
 ![screenshots/1.png](screenshots/1.png)
