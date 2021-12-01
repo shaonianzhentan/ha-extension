@@ -8,7 +8,7 @@
         "description": "扩展描述"
     },
     "link_ha": {
-        "message": "连接到您的HomeAssistant",
+        "message": "连接到你的HomeAssistant",
         "description": "文本"
     },
     "error_tips": {
