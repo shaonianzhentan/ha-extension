@@ -21,6 +21,8 @@ export class HomeAssistant extends LitElement {
                 display: block;
                 padding-top: 20px;
             }
+            .item-title:hover{color:#03a9f4;}
+            .item-link:hover{color:#ff9800;}
         `;
     }
 
@@ -81,8 +83,8 @@ export class HomeAssistant extends LitElement {
         </mwc-list-item>
         <li divider role="separator"></li>
         ${this.list.map((ele, index) => html`<mwc-list-item twoline hasMeta>
-          <span title="${ele.title}" @click="${this._selectClick.bind(this, ele, index)}">${ele.title}</span>
-          <span title="${ele.url}" @click="${this._selectClick.bind(this, ele, index)}" slot="secondary">${ele.url}</span>
+          <span class="item-title" title="${ele.title}" @click="${this._selectClick.bind(this, ele, index)}">${ele.title}</span>
+          <a class="item-link" title="${ele.url}" href="${ele.url}" target="_blank" slot="secondary">${ele.url}</a>
           <mwc-icon slot="meta" title="${this.i18n.delete}" @click="${this._removeClick.bind(this, index)}">remove</mwc-icon>
         </mwc-list-item>`
             )}
