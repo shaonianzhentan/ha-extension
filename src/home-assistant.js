@@ -13,8 +13,11 @@ export class HomeAssistant extends LitElement {
         return css`
             .link-home {
                 padding: 30px;
-                padding-top: 100px;
+                padding-top: 140px;
                 text-align: center;
+                color: #42bdf5;
+                --mdc-theme-secondary: #42bdf5;
+                --mdc-theme-on-secondary: white;
             }
             .menu-footer {
                 text-align:center;
@@ -22,7 +25,12 @@ export class HomeAssistant extends LitElement {
                 padding-top: 20px;
             }
             .item-title:hover{color:#03a9f4;}
+            .selected{color:#03a9f4;}
             .item-link:hover{color:#ff9800;}
+            #pos{
+                position: fixed; bottom: 10px; right: 10px
+            }
+            iframe{ border:none;width:100%;height:100vh; }
         `;
     }
 
@@ -38,7 +46,6 @@ export class HomeAssistant extends LitElement {
         this.i18n = {
             title: chrome.i18n.getMessage("title"),
             description: chrome.i18n.getMessage("description"),
-            link_ha: chrome.i18n.getMessage("link_ha"),
             error_tips: chrome.i18n.getMessage("error_tips"),
             add: chrome.i18n.getMessage("add"),
             cancel: chrome.i18n.getMessage("cancel"),
@@ -59,18 +66,23 @@ export class HomeAssistant extends LitElement {
         if (list.length === 0) {
             return html`<div class="link-home">
                 <img src="${logo}" />
-                <h1>${this.i18n.link_ha}</h1>
-                <mwc-button raised label="${this.i18n.add}" icon="add" @click="${this._addClick}"></mwc-button>
+                <h1>${this.i18n.title}</h1>
+                <p>${this.i18n.description}</p>
+                <mwc-fab icon="add" mini @click="${this.addClick}"></mwc-fab>
             </div>`
         }
         if (!url) {
-            url = list[list.length - 1].url
+            const obj = list.find(ele => ele.show === 1)
+            if (obj) {
+                url = obj.url
+            } else {
+                url = list[list.length - 1].url
+            }
         }
         return html`
-    <iframe src="${url}" style="border:none;width:100%;height:100vh;"></iframe>    
-    <div id="pos" style="position: fixed; bottom: 10px; right: 10px">
-      <mwc-fab id="button" @mousedown="${this._mousedown}" @click="${this._openClick
-            }" mini icon="menu" label="Open Menu"></mwc-fab>
+    <iframe src="${url}"></iframe>    
+    <div id="pos">
+      <mwc-fab id="button" @mousedown="${this._mousedown}" mini icon="menu" label="Open Menu"></mwc-fab>
       <mwc-menu id="menu">
         <mwc-list-item graphic="avatar" twoline noninteractive>
           <span>${this.i18n.title}</span>
@@ -83,15 +95,15 @@ export class HomeAssistant extends LitElement {
         </mwc-list-item>
         <li divider role="separator"></li>
         ${this.list.map((ele, index) => html`<mwc-list-item twoline hasMeta>
-          <span class="item-title" title="${ele.title}" @click="${this._selectClick.bind(this, ele, index)}">${ele.title}</span>
+          <span class="item-title ${ele.show === 1 ? 'selected' : ''}" title="${ele.title}" @click="${this.selectClick.bind(this, ele, index)}">${ele.title}</span>
           <a class="item-link" title="${ele.url}" href="${ele.url}" target="_blank" slot="secondary">${ele.url}</a>
-          <mwc-icon slot="meta" title="${this.i18n.delete}" @click="${this._removeClick.bind(this, index)}">remove</mwc-icon>
+          <mwc-icon slot="meta" title="${this.i18n.delete}" @click="${this.removeClick.bind(this, index)}">remove</mwc-icon>
         </mwc-list-item>`
-            )}
+        )}
             <li divider role="separator"></li>
             <mwc-list-item class="menu-footer">
                 <mwc-button outlined label="${this.i18n.cancel}"></mwc-button>
-                <mwc-button raised label="${this.i18n.add}"  @click="${this._addClick}"></mwc-button>
+                <mwc-button raised label="${this.i18n.add}" @click="${this.addClick}"></mwc-button>
             </mwc-list-item>
       </mwc-menu>
     </div>`;
@@ -101,26 +113,30 @@ export class HomeAssistant extends LitElement {
         return JSON.parse(JSON.stringify(this.list));
     }
 
-    _mousedown() {
-        document.onmouseup = () => {
+    _mousedown(ev) {
+        let x = ev.clientX
+        let y = ev.clientY
+        document.onmouseup = (event) => {
             document.onmousemove = null;
+            if (x === event.clientX && y === event.clientY) {
+                this.openClick()
+            }
         };
+        const pos = this.shadowRoot.querySelector('#pos');
         document.onmousemove = (event) => {
-            const pos = this.shadowRoot.querySelector('#pos');
             pos.style.left = `${event.clientX - 20}px`;
             pos.style.top = `${event.clientY - 20}px`;
-            // console.log(event);
         };
     }
 
-    _openClick() {
+    openClick() {
         const menu = this.shadowRoot.querySelector('#menu');
         const button = this.shadowRoot.querySelector('#button');
         menu.anchor = button;
         menu.open = true;
     }
 
-    _addClick() {
+    addClick() {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.scripting.executeScript({
                 target: { tabId: tabs[0].id },
@@ -139,20 +155,23 @@ export class HomeAssistant extends LitElement {
                     const list = this._list;
                     if (!list.find(ele => ele.url === result.url)) {
                         this.url = result.url
-                        list.push(result);
+                        list.forEach(ele => ele.show = 0)
+                        list.push(Object.assign(result, {
+                            show: 1
+                        }));
                         this.list = list;
-                        this._save()
+                        this.saveList()
                     }
                 } else {
-                    this._showTips(this.i18n.error_tips)
+                    this.toast(this.i18n.error_tips)
                 }
             }).catch(() => {
-                this._showTips(this.i18n.error_tips)
+                this.toast(this.i18n.error_tips)
             });
         });
     }
 
-    _showTips(text) {
+    toast(text) {
         const snackbar = document.createElement('mwc-snackbar')
         snackbar.labelText = text
         document.body.appendChild(snackbar)
@@ -162,23 +181,23 @@ export class HomeAssistant extends LitElement {
         }, 3000)
     }
 
-    _selectClick(data, index) {
+    selectClick(data, index) {
         this.url = data.url
         const list = this._list;
-        list[index] = list[list.length - 1]
-        list[list.length - 1] = Object.assign({}, data)
+        list.forEach(ele => ele.show = 0)
+        list[index].show = 1
         this.list = list;
-        this._save()
+        this.saveList()
     }
 
-    _removeClick(index) {
+    removeClick(index) {
         const list = this._list;
         list.splice(index, 1);
         this.list = list;
-        this._save()
+        this.saveList()
     }
 
-    _save() {
+    saveList() {
         localStorage['list'] = JSON.stringify(this.list)
     }
 }
