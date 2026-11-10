@@ -4,26 +4,284 @@
 <head>
     <meta charset="utf-8" />
     <title>HomeAssistant</title>
-    <link rel="stylesheet" href="ha/style.css" />
-    <script type="module" src="ha/home-assistant.es.js"></script>
     <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        [hidden] { display: none !important; }
+        :root {
+            --primary: #03a9f4;
+            --primary-deep: #0288d1;
+            --accent: #42bdf5;
+            --bg: #f5f8fb;
+            --surface: #ffffff;
+            --text: #1f2d3d;
+            --muted: #8492a6;
+            --border: #e6ecf3;
+            --danger: #e53935;
+            --shadow: 0 12px 32px rgba(18, 52, 86, .18);
+            --radius: 14px;
+            --fs-sm: 13px;
+            --fs-md: 14px;
+            --fs-lg: 16px;
+            --fs-xl: 22px;
         }
-
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #151a21;
+                --surface: #1f2630;
+                --text: #e8eef6;
+                --muted: #8d9bad;
+                --border: #303a47;
+                --shadow: 0 12px 32px rgba(0, 0, 0, .5);
+            }
+            .empty-logo { background: linear-gradient(135deg, #22384a, #1c2f40); }
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; overflow: hidden; }
         body {
             width: 400px;
             height: 550px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            font-size: var(--fs-md);
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+        button, input { font-family: inherit; }
+        button:focus-visible, a:focus-visible, input:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        #app { position: relative; width: 100%; height: 100%; }
+        #stage, #stage iframe { width: 100%; height: 100%; }
+        #stage iframe { display: block; border: 0; background: var(--surface); }
+
+        .empty {
+            height: 100%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 28px; text-align: center;
+        }
+        .empty-logo {
+            width: 88px; height: 88px; padding: 16px; border-radius: 24px;
+            background: linear-gradient(135deg, #e3f5ff, #d0ecff);
+            box-shadow: 0 10px 24px rgba(3, 169, 244, .18);
+        }
+        .empty h1 { font-size: var(--fs-xl); margin: 20px 0 8px; }
+        .empty p { font-size: var(--fs-md); line-height: 1.6; color: var(--muted); margin: 0; }
+        .empty-action {
+            margin-top: 22px; padding: 11px 24px; border: 0; border-radius: 999px;
+            font-size: var(--fs-md); font-weight: 600; color: #fff; cursor: pointer;
+            background: linear-gradient(135deg, var(--accent), var(--primary-deep));
+            box-shadow: 0 6px 16px rgba(3, 169, 244, .32);
+            transition: transform .15s, box-shadow .15s;
+        }
+        .empty-action:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(3, 169, 244, .4); }
+        .empty-hint { margin-top: 14px; font-size: var(--fs-sm); color: var(--muted); }
+
+        .loading {
+            position: absolute; inset: 0; z-index: 5;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; background: var(--bg);
+        }
+        .spinner {
+            width: 34px; height: 34px; border: 3px solid var(--border);
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        .loading-text { font-size: var(--fs-md); color: var(--muted); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #pos { position: fixed; bottom: 12px; right: 12px; z-index: 10; }
+        .fab {
+            width: 44px; height: 44px; border: 0; border-radius: 50%;
+            font-size: 20px; color: #fff; cursor: grab;
+            background: linear-gradient(135deg, var(--accent), var(--primary-deep));
+            box-shadow: 0 6px 18px rgba(3, 169, 244, .45);
+            transition: transform .15s, box-shadow .15s;
+        }
+        .fab:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(3, 169, 244, .55); }
+        .fab:active { cursor: grabbing; transform: scale(.96); }
+
+        .menu {
+            position: absolute; left: 0; top: 0; width: min(336px, calc(100vw - 24px));
+            max-height: min(440px, calc(100vh - 80px)); overflow-y: auto;
+            padding: 8px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: var(--radius);
+            box-shadow: var(--shadow); animation: pop .16s ease-out;
+        }
+        .menu::-webkit-scrollbar { width: 6px; }
+        .menu::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+        .menu-header { display: flex; align-items: center; gap: 10px; padding: 8px; }
+        .menu-header img {
+            width: 36px; height: 36px; padding: 4px;
+            border: 1px solid var(--border); border-radius: 10px;
+        }
+        .menu-heading { flex: 1; min-width: 0; }
+        .menu-title { font-size: var(--fs-md); font-weight: 600; }
+        .menu-desc {
+            font-size: var(--fs-sm); color: var(--muted);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .icon-button {
+            width: 30px; height: 30px; border: 0; border-radius: 8px;
+            background: transparent; color: var(--muted); font-size: var(--fs-lg);
+            cursor: pointer; transition: background .15s, color .15s;
+        }
+        .icon-button:hover { background: var(--bg); color: var(--primary); }
+        .divider { height: 1px; background: var(--border); margin: 6px 4px; }
+        .menu-list { display: flex; flex-direction: column; gap: 2px; }
+        .menu-item {
+            display: flex; align-items: center; gap: 8px; padding: 9px 8px;
+            border-radius: 10px; transition: background .15s;
+        }
+        .menu-item:hover { background: var(--bg); }
+        .menu-item.active { background: rgba(3, 169, 244, .09); }
+        .item-badge {
+            flex: none; width: 30px; height: 30px; border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: var(--fs-sm); font-weight: 600; color: var(--primary-deep);
+            background: rgba(3, 169, 244, .12);
+        }
+        .item-main { flex: 1; min-width: 0; }
+        .item-title {
+            display: block; font-size: var(--fs-md); font-weight: 500; cursor: pointer;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .item-title:hover, .menu-item.active .item-title { color: var(--primary-deep); }
+        .item-link {
+            display: block; margin-top: 2px; font-size: var(--fs-sm); color: var(--muted);
+            text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .item-link:hover { color: #ff9800; }
+        .item-actions { display: flex; gap: 2px; opacity: .35; transition: opacity .15s; }
+        .menu-item:hover .item-actions, .menu-item:focus-within .item-actions { opacity: 1; }
+        .item-btn {
+            width: 26px; height: 26px; border: 0; border-radius: 6px;
+            background: transparent; color: var(--muted); font-size: var(--fs-md); cursor: pointer;
+        }
+        .item-btn:hover { background: rgba(3, 169, 244, .12); color: var(--primary-deep); }
+        .item-btn.danger:hover { background: rgba(229, 57, 53, .12); color: var(--danger); }
+        .menu-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 4px 4px; }
+        .btn {
+            padding: 8px 16px; border-radius: 8px; font-size: var(--fs-md); cursor: pointer;
+            transition: transform .15s, box-shadow .15s, background .15s;
+        }
+        .btn:active { transform: scale(.97); }
+        .btn-ghost { border: 1px solid var(--border); background: var(--surface); color: var(--muted); }
+        .btn-ghost:hover { color: var(--text); }
+        .btn-primary {
+            border: 1px solid transparent; color: #fff;
+            background: linear-gradient(135deg, var(--accent), var(--primary-deep));
+        }
+        .btn-primary:hover { box-shadow: 0 4px 12px rgba(3, 169, 244, .35); }
+        .btn-danger { border: 1px solid transparent; background: var(--danger); color: #fff; }
+
+        .dialog-mask {
+            position: fixed; inset: 0; z-index: 30;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(10, 28, 50, .45); animation: fade .15s ease-out;
+        }
+        @keyframes fade { from { opacity: 0; } }
+        .dialog {
+            width: min(320px, calc(100vw - 24px)); max-height: calc(100vh - 24px);
+            overflow-y: auto; padding: 20px; border-radius: var(--radius);
+            background: var(--surface); box-shadow: var(--shadow);
+        }
+        .dialog-title { font-size: var(--fs-lg); font-weight: 600; }
+        .dialog-text {
+            margin-top: 8px; font-size: var(--fs-md); line-height: 1.6;
+            color: var(--muted); word-break: break-all;
+        }
+        .dialog-input {
+            width: 100%; margin-top: 12px; padding: 10px 12px;
+            border: 1px solid var(--border); border-radius: 8px;
+            background: var(--bg); color: var(--text); font-size: var(--fs-md);
+        }
+        .dialog-note {
+            margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+            background: var(--bg); border: 1px dashed var(--border);
+            font-size: var(--fs-sm); color: var(--muted); line-height: 1.5;
+            word-break: break-all; white-space: pre-wrap;
+        }
+        .dialog-fields { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+        .field-row { display: flex; flex-direction: column; gap: 6px; }
+        .field-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: var(--fs-md); }
+        .field-name { color: var(--text); }
+        .field-number {
+            width: 64px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 6px;
+            background: var(--bg); color: var(--text); font-size: var(--fs-sm); text-align: center;
+        }
+        .field-range { width: 100%; accent-color: var(--primary); cursor: pointer; }
+        .field-bounds { display: flex; justify-content: space-between; color: var(--muted); font-size: var(--fs-sm); }
+        .dialog-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+        .dialog-reset { margin-right: auto; }
+
+        #toast-area {
+            position: fixed; left: 0; right: 0; bottom: 18px; z-index: 40;
+            display: flex; justify-content: center; pointer-events: none;
+        }
+        .toast {
+            max-width: 340px; padding: 10px 18px; border-radius: 999px;
+            background: #263238; color: #fff; font-size: var(--fs-md);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .25); animation: toast-in .2s ease-out;
+        }
+        .toast.success { background: #2e7d32; }
+        .toast.error { background: #c62828; }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
     </style>
-
 </head>
 
 <body>
-    <!-- <home-assistant logo="../icons/homeassistant.svg"></home-assistant> -->
+    <div id="app">
+        <div id="stage"></div>
+        <div id="loading" class="loading" hidden>
+            <div class="spinner"></div>
+            <div id="loading-text" class="loading-text"></div>
+            <button id="retry-button" class="btn btn-primary" type="button" hidden></button>
+        </div>
+    </div>
+
+    <div id="pos" hidden>
+        <div id="menu" class="menu" hidden>
+            <div class="menu-header">
+                <img src="../icons/homeassistant.svg" alt="" />
+                <div class="menu-heading">
+                    <div id="menu-title" class="menu-title"></div>
+                    <div id="menu-desc" class="menu-desc"></div>
+                </div>
+                <button id="settings-button" class="icon-button" type="button"></button>
+                <button id="refresh-button" class="icon-button" type="button"></button>
+            </div>
+            <div class="divider"></div>
+            <div id="menu-list" class="menu-list"></div>
+            <div class="divider"></div>
+            <div class="menu-footer">
+                <button id="cancel-button" class="btn btn-ghost" type="button"></button>
+                <button id="add-button" class="btn btn-primary" type="button"></button>
+            </div>
+        </div>
+        <button id="menu-button" class="fab" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="menu">☰</button>
+    </div>
+
+    <div id="dialog" class="dialog-mask" hidden>
+        <div class="dialog" role="dialog" aria-modal="true">
+            <div id="dialog-title" class="dialog-title"></div>
+            <div id="dialog-text" class="dialog-text"></div>
+            <input id="dialog-input" class="dialog-input" type="text" hidden />
+            <div id="dialog-note" class="dialog-note" hidden></div>
+            <div id="dialog-fields" class="dialog-fields" hidden></div>
+            <div class="dialog-actions">
+                <button id="dialog-reset" class="btn btn-ghost dialog-reset" type="button" hidden></button>
+                <button id="dialog-cancel" class="btn btn-ghost" type="button"></button>
+                <button id="dialog-confirm" class="btn btn-primary" type="button"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-area"></div>
     <script src="index.js"></script>
 </body>
 

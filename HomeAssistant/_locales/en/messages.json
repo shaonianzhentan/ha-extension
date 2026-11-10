@@ -26,5 +26,105 @@
     "delete": {
         "message": "delete",
         "description": "text"
+    },
+    "add_current": {
+        "message": "Add current page",
+        "description": "text"
+    },
+    "add_tip": {
+        "message": "Open your HomeAssistant page, then click the button",
+        "description": "text"
+    },
+    "menu": {
+        "message": "Menu",
+        "description": "text"
+    },
+    "refresh": {
+        "message": "Refresh",
+        "description": "text"
+    },
+    "rename": {
+        "message": "Rename",
+        "description": "text"
+    },
+    "rename_title": {
+        "message": "Rename entry",
+        "description": "text"
+    },
+    "rename_tip": {
+        "message": "Edit the title; the link is read-only",
+        "description": "text"
+    },
+    "delete_title": {
+        "message": "Delete entry",
+        "description": "text"
+    },
+    "delete_confirm": {
+        "message": "Delete this entry?",
+        "description": "text"
+    },
+    "confirm_delete": {
+        "message": "Delete",
+        "description": "text"
+    },
+    "duplicate_tips": {
+        "message": "This page has already been added",
+        "description": "text"
+    },
+    "added": {
+        "message": "Added",
+        "description": "text"
+    },
+    "deleted": {
+        "message": "Deleted",
+        "description": "text"
+    },
+    "loading": {
+        "message": "Loading HomeAssistant…",
+        "description": "text"
+    },
+    "load_failed": {
+        "message": "Page is slow or unreachable",
+        "description": "text"
+    },
+    "retry": {
+        "message": "Reload",
+        "description": "text"
+    },
+    "save": {
+        "message": "Save",
+        "description": "text"
+    },
+    "open_new": {
+        "message": "Open in a new tab",
+        "description": "text"
+    },
+    "settings": {
+        "message": "Display settings",
+        "description": "text"
+    },
+    "width": {
+        "message": "Width",
+        "description": "text"
+    },
+    "height": {
+        "message": "Height",
+        "description": "text"
+    },
+    "size_tip": {
+        "message": "Drag the slider or type a value; the minimum keeps the settings fully visible",
+        "description": "text"
+    },
+    "size_saved": {
+        "message": "Popup size updated",
+        "description": "text"
+    },
+    "size_invalid": {
+        "message": "Please enter a value within the allowed range",
+        "description": "text"
+    },
+    "reset": {
+        "message": "Reset",
+        "description": "text"
     }
 }

@@ -26,5 +26,105 @@
     "delete": {
         "message": "删除",
         "description": "文本"
+    },
+    "add_current": {
+        "message": "添加当前页面",
+        "description": "文本"
+    },
+    "add_tip": {
+        "message": "打开 HomeAssistant 页面后，点击按钮即可添加",
+        "description": "文本"
+    },
+    "menu": {
+        "message": "菜单",
+        "description": "文本"
+    },
+    "refresh": {
+        "message": "刷新",
+        "description": "文本"
+    },
+    "rename": {
+        "message": "重命名",
+        "description": "文本"
+    },
+    "rename_title": {
+        "message": "重命名地址",
+        "description": "文本"
+    },
+    "rename_tip": {
+        "message": "可修改标题，链接为只读不可更改",
+        "description": "文本"
+    },
+    "delete_title": {
+        "message": "删除地址",
+        "description": "文本"
+    },
+    "delete_confirm": {
+        "message": "确定删除以下地址吗？",
+        "description": "文本"
+    },
+    "confirm_delete": {
+        "message": "删除",
+        "description": "文本"
+    },
+    "duplicate_tips": {
+        "message": "该页面已添加",
+        "description": "文本"
+    },
+    "added": {
+        "message": "已添加",
+        "description": "文本"
+    },
+    "deleted": {
+        "message": "已删除",
+        "description": "文本"
+    },
+    "loading": {
+        "message": "正在加载 HomeAssistant…",
+        "description": "文本"
+    },
+    "load_failed": {
+        "message": "页面加载较慢或无法访问",
+        "description": "文本"
+    },
+    "retry": {
+        "message": "重新加载",
+        "description": "文本"
+    },
+    "save": {
+        "message": "保存",
+        "description": "文本"
+    },
+    "open_new": {
+        "message": "在新标签页打开",
+        "description": "文本"
+    },
+    "settings": {
+        "message": "显示设置",
+        "description": "文本"
+    },
+    "width": {
+        "message": "宽度",
+        "description": "文本"
+    },
+    "height": {
+        "message": "高度",
+        "description": "文本"
+    },
+    "size_tip": {
+        "message": "可拖动滑块或直接输入数值；滑块两端为可用范围，下限保证设置界面完整显示",
+        "description": "文本"
+    },
+    "size_saved": {
+        "message": "显示大小已更新",
+        "description": "文本"
+    },
+    "size_invalid": {
+        "message": "请输入有效范围内的数值",
+        "description": "文本"
+    },
+    "reset": {
+        "message": "恢复默认",
+        "description": "文本"
     }
 }
