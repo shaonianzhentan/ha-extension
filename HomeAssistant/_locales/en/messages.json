@@ -39,6 +39,10 @@
         "message": "Menu",
         "description": "text"
     },
+    "help": {
+        "message": "Help",
+        "description": "text"
+    },
     "refresh": {
         "message": "Refresh",
         "description": "text"

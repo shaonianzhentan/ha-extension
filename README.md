@@ -15,13 +15,24 @@
 6. 在菜单面板中点击蓝色标题在当前小窗口打开，橙色链接则打开新页面
 
 
-在配置文件`configuration.yaml`中添加以下节点才能嵌套使用
+要让扩展能嵌套显示 HomeAssistant 页面，需要关闭 `X-Frame-Options: SAMEORIGIN`（以及 CSP `frame-ancestors` 限制），否则 HomeAssistant 会拒绝在扩展小窗口的 iframe 中显示。
+
+**新版 HomeAssistant（推荐）：界面配置**
+
+打开 HomeAssistant 的 `设置` → `网络`（即 `http://你的HA地址:8123/config/network`），展开 `更多选项`，关闭 `发送 X-Frame-Options` 开关并保存：
+
+![界面配置关闭 X-Frame-Options](screenshots/iframe.png)
+
+**旧版 HomeAssistant：修改配置文件**
+
+在配置文件`configuration.yaml`中添加以下节点，然后重启 HomeAssistant：
+
 ```yaml
 http:
   use_x_frame_options: false
 ```
-> 该选项用于关闭 `X-Frame-Options: SAMEORIGIN`（以及 CSP `frame-ancestors` 限制），否则 HomeAssistant 会拒绝在扩展小窗口的 iframe 中显示。
-> 若未配置，扩展加载时会自动检测并弹出提示，引导你添加上述配置后重启 HomeAssistant 再重新打开扩展。
+
+> 若未配置，扩展加载时会自动检测并弹出提示，引导你完成上述配置后再重新打开扩展。
 
 
 ## 截图

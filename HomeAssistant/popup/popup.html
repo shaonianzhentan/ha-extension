@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 
 <head>
     <meta charset="utf-8" />
-    <title>HomeAssistant</title>
+    <title></title>
     <style>
         [hidden] { display: none !important; }
         :root {
@@ -160,7 +160,8 @@
         }
         .item-btn:hover { background: rgba(3, 169, 244, .12); color: var(--primary-deep); }
         .item-btn.danger:hover { background: rgba(229, 57, 53, .12); color: var(--danger); }
-        .menu-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 8px 4px 4px; }
+        .menu-footer { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 8px 4px 4px; }
+        #help-button { margin-right: auto; }
         .btn {
             padding: 8px 16px; border-radius: 8px; font-size: var(--fs-md); cursor: pointer;
             transition: transform .15s, box-shadow .15s, background .15s;
@@ -259,6 +260,7 @@
             <div id="menu-list" class="menu-list"></div>
             <div class="divider"></div>
             <div class="menu-footer">
+                <button id="help-button" class="icon-button" type="button"></button>
                 <button id="cancel-button" class="btn btn-ghost" type="button"></button>
                 <button id="add-button" class="btn btn-primary" type="button"></button>
             </div>

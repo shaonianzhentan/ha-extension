@@ -39,6 +39,10 @@
         "message": "菜单",
         "description": "文本"
     },
+    "help": {
+        "message": "帮助",
+        "description": "文本"
+    },
     "refresh": {
         "message": "刷新",
         "description": "文本"

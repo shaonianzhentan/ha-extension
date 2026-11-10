@@ -18,6 +18,7 @@
         add_current: chrome.i18n.getMessage('add_current'),
         add_tip: chrome.i18n.getMessage('add_tip'),
         menu: chrome.i18n.getMessage('menu'),
+        help: chrome.i18n.getMessage('help'),
         refresh: chrome.i18n.getMessage('refresh'),
         rename: chrome.i18n.getMessage('rename'),
         rename_title: chrome.i18n.getMessage('rename_title'),
@@ -46,6 +47,9 @@
         iframe_blocked_copy: chrome.i18n.getMessage('iframe_blocked_copy'),
         iframe_blocked_copied: chrome.i18n.getMessage('iframe_blocked_copied')
     };
+
+    document.title = i18n.title;
+    document.documentElement.lang = chrome.i18n.getUILanguage() || 'zh-CN';
 
     const $ = (id) => document.getElementById(id);
     const stage = $('stage');
@@ -99,6 +103,9 @@
     $('settings-button').textContent = '⚙';
     $('settings-button').title = i18n.settings;
     $('settings-button').setAttribute('aria-label', i18n.settings);
+    $('help-button').textContent = '?';
+    $('help-button').title = i18n.help;
+    $('help-button').setAttribute('aria-label', i18n.help);
     $('refresh-button').textContent = '⟳';
     $('refresh-button').title = i18n.refresh;
     $('retry-button').textContent = i18n.retry;
@@ -715,6 +722,9 @@
     });
 
     $('settings-button').addEventListener('click', openSizeDialog);
+    $('help-button').addEventListener('click', () => {
+        chrome.tabs.create({ url: 'https://github.com/shaonianzhentan/ha-extension' });
+    });
     $('cancel-button').addEventListener('click', closeMenu);
     $('add-button').addEventListener('click', addClick);
     $('refresh-button').addEventListener('click', () => {
