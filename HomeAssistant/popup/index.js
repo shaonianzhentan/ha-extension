@@ -39,7 +39,12 @@
         size_saved: chrome.i18n.getMessage('size_saved'),
         size_invalid: chrome.i18n.getMessage('size_invalid'),
         reset: chrome.i18n.getMessage('reset'),
-        rename_tip: chrome.i18n.getMessage('rename_tip')
+        rename_tip: chrome.i18n.getMessage('rename_tip'),
+        iframe_blocked_title: chrome.i18n.getMessage('iframe_blocked_title'),
+        iframe_blocked_text: chrome.i18n.getMessage('iframe_blocked_text'),
+        iframe_blocked_note: chrome.i18n.getMessage('iframe_blocked_note'),
+        iframe_blocked_copy: chrome.i18n.getMessage('iframe_blocked_copy'),
+        iframe_blocked_copied: chrome.i18n.getMessage('iframe_blocked_copied')
     };
 
     const $ = (id) => document.getElementById(id);
@@ -222,6 +227,17 @@
         iframe.contentWindow.postMessage({ type: MESSAGE.HELLO }, haOrigin);
     }
 
+    // 判断 iframe 是否因 X-Frame-Options / CSP frame-ancestors 被拒绝嵌入。
+    // 被拦截时浏览器会让 frame 停在 about:blank（与扩展页面同源，可读取 location.href）；
+    // 成功加载跨域 HA 页面时读取 location.href 会因同源策略抛 SecurityError。
+    function isFrameBlocked(frame) {
+        try {
+            return frame.contentWindow.location.href === 'about:blank';
+        } catch (e) {
+            return false;
+        }
+    }
+
     function pushCurrentTab(origin) {
         const win = iframe && iframe.contentWindow;
         if (!win) return;
@@ -293,6 +309,10 @@
                 clearTimeout(loadTimer);
                 loading.hidden = true;
                 updateOrigin();
+                if (isFrameBlocked(frame)) {
+                    showIframeBlockedDialog(target);
+                    return;
+                }
                 sendHello();
             });
             iframe = frame;
@@ -432,6 +452,46 @@
         toastArea.appendChild(el);
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => el.remove(), 3000);
+    }
+
+    function copyText(text) {
+        const done = () => toast(i18n.iframe_blocked_copied, 'success');
+        const fail = () => toast(i18n.load_failed, 'error');
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done, fail));
+                return;
+            }
+        } catch (e) {
+            // 继续走降级方案
+        }
+        fallbackCopy(text, done, fail);
+    }
+
+    function fallbackCopy(text, done, fail) {
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            const ok = document.execCommand('copy');
+            ta.remove();
+            ok ? done() : fail();
+        } catch (e) {
+            fail();
+        }
+    }
+
+    function showIframeBlockedDialog(url) {
+        openDialog({
+            title: i18n.iframe_blocked_title,
+            text: i18n.iframe_blocked_text,
+            note: i18n.iframe_blocked_note,
+            confirmText: i18n.iframe_blocked_copy,
+            onConfirm: () => copyText(i18n.iframe_blocked_note)
+        });
     }
 
     function openDialog(options) {

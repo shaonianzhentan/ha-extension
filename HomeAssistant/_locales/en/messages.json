@@ -126,5 +126,25 @@
     "reset": {
         "message": "Reset",
         "description": "text"
+    },
+    "iframe_blocked_title": {
+        "message": "Cannot display in this window",
+        "description": "title when iframe is blocked"
+    },
+    "iframe_blocked_text": {
+        "message": "HomeAssistant refused to be embedded in an iframe (blocked by X-Frame-Options or CSP frame-ancestors). Please add the following to configuration.yaml in HomeAssistant, restart, then reopen this extension:",
+        "description": "explanation when iframe is blocked"
+    },
+    "iframe_blocked_note": {
+        "message": "http:\n  use_x_frame_options: false",
+        "description": "YAML snippet to add to HA config"
+    },
+    "iframe_blocked_copy": {
+        "message": "Copy config",
+        "description": "copy config button label"
+    },
+    "iframe_blocked_copied": {
+        "message": "Config copied to clipboard",
+        "description": "copy success toast"
     }
 }

@@ -20,6 +20,8 @@
 http:
   use_x_frame_options: false
 ```
+> 该选项用于关闭 `X-Frame-Options: SAMEORIGIN`（以及 CSP `frame-ancestors` 限制），否则 HomeAssistant 会拒绝在扩展小窗口的 iframe 中显示。
+> 若未配置，扩展加载时会自动检测并弹出提示，引导你添加上述配置后重启 HomeAssistant 再重新打开扩展。
 
 
 ## 截图
