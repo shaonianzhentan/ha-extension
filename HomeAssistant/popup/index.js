@@ -21,6 +21,8 @@
         help: chrome.i18n.getMessage('help'),
         refresh: chrome.i18n.getMessage('refresh'),
         rename: chrome.i18n.getMessage('rename'),
+        set_default: chrome.i18n.getMessage('set_default'),
+        default_set: chrome.i18n.getMessage('default_set'),
         rename_title: chrome.i18n.getMessage('rename_title'),
         delete_title: chrome.i18n.getMessage('delete_title'),
         delete_confirm: chrome.i18n.getMessage('delete_confirm'),
@@ -382,9 +384,13 @@
             const item = document.createElement('div');
             item.className = 'menu-item' + (ele.show === 1 ? ' active' : '');
 
+            const isDefault = ele.show === 1;
             const badge = document.createElement('div');
-            badge.className = 'item-badge';
-            badge.textContent = String(index + 1);
+            badge.className = 'item-badge' + (isDefault ? ' default' : '');
+            badge.textContent = isDefault ? '★' : String(index + 1);
+            badge.title = i18n.set_default;
+            badge.setAttribute('aria-label', i18n.set_default);
+            badge.addEventListener('click', () => setDefaultClick(index));
 
             const main = document.createElement('div');
             main.className = 'item-main';
@@ -441,6 +447,14 @@
         list[index].show = 1;
         saveList();
         render();
+    }
+
+    function setDefaultClick(index) {
+        if (!list[index]) return;
+        list.forEach((ele, i) => { ele.show = i === index ? 1 : 0; });
+        saveList();
+        renderMenu();
+        toast(i18n.default_set, 'success');
     }
 
     function removeClick(index) {

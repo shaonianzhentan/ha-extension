@@ -51,6 +51,14 @@
         "message": "Rename",
         "description": "text"
     },
+    "set_default": {
+        "message": "Set as startup",
+        "description": "button to set entry as default startup page"
+    },
+    "default_set": {
+        "message": "Set as default startup page",
+        "description": "toast after setting default startup page"
+    },
     "rename_title": {
         "message": "Rename entry",
         "description": "text"

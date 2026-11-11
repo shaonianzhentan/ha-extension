@@ -51,6 +51,14 @@
         "message": "重命名",
         "description": "文本"
     },
+    "set_default": {
+        "message": "设为启动页",
+        "description": "将地址设为默认启动页的按钮文案"
+    },
+    "default_set": {
+        "message": "已设为默认启动页",
+        "description": "设为默认启动页后的提示"
+    },
     "rename_title": {
         "message": "重命名地址",
         "description": "文本"
