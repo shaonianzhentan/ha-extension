@@ -138,25 +138,5 @@
     "reset": {
         "message": "恢复默认",
         "description": "文本"
-    },
-    "iframe_blocked_title": {
-        "message": "无法在窗口中显示",
-        "description": "iframe 被阻止时的标题"
-    },
-    "iframe_blocked_text": {
-        "message": "HomeAssistant 拒绝了 iframe 嵌入（受 X-Frame-Options 或 CSP frame-ancestors 限制）。请在 HomeAssistant 的 configuration.yaml 中添加以下配置并重启服务，然后重新打开本扩展：",
-        "description": "iframe 被阻止时的说明"
-    },
-    "iframe_blocked_note": {
-        "message": "http:\n  use_x_frame_options: false",
-        "description": "需要添加到 HA 配置的 YAML 片段"
-    },
-    "iframe_blocked_copy": {
-        "message": "复制配置",
-        "description": "复制配置按钮文案"
-    },
-    "iframe_blocked_copied": {
-        "message": "配置已复制到剪贴板",
-        "description": "复制成功提示"
     }
 }
